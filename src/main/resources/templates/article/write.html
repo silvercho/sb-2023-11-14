@@ -1,31 +1,44 @@
-<div style="display: flex; flex-direction: column; gap:20px; max-width:500px;">
-    <input type="text" id="input-title" placeholder="제목">
+<a href="http://localhost:8020/article/doWrite?title=제목임&body=내용임">
+    전송
+</a>
+<hr>
+<form method="POST" action="/article/doWrite" onsubmit="submitWriteForm(this); return false;"
+      style="display: flex; flex-direction: column; gap:20px; max-width:500px;">
+    <input type="text" name="title" placeholder="제목">
 
-    <input type="text" id="input-body" placeholder="내용">
+    <input type="text" name="body" placeholder="내용">
 
     <!-- javascript:; 는 아무것도 하지 않는다는 뜻 -->
-    <a href="javascript:;" onclick="submitWriteForm();">
+    <button type="submit">
         글쓰기
-    </a>
-</div>
+    </button>
+</form>
 
 <script>
-    function submitWriteForm() {
-        const title = document.getElementById('input-title').value;
-        const body = document.getElementById('input-body').value;
+    function submitWriteForm(form) {
+        const inputTitle = form.title;
+        const inputBody = form.body;
 
-        if ( title.length == 0 ) {
+        inputTitle.value = inputTitle.value.trim();
+        inputBody.value = inputBody.value.trim();
+
+        const title = inputTitle.value;
+        const body = inputBody.value;
+
+        if (title.length == 0) {
             alert('제목을 입력해주세요.');
+            inputTitle.focus();
 
             return;
         }
 
-        if ( body.length == 0 ) {
+        if (body.length == 0) {
             alert('내용을 입력해주세요.');
+            inputBody.focus();
 
             return;
         }
 
-        location.href = `/article/doWrite?title=${title}&body=${body}`;
+        form.submit();
     }
 </script>
