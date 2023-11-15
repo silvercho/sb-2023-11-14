@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 @Controller
@@ -19,9 +20,9 @@ public class ArticleController {
     String showWrite(){
         return "article/write";
     }
-    @GetMapping ("article/doWrite")
+    @PostMapping("article/write")
     @ResponseBody
-    RsData doWrite(
+    RsData write(
             String title,
             String body
     ){
