@@ -9,14 +9,11 @@ import java.util.List;
 @Service // 저는 단 한번만 생성되고, 그 이후에는 재사용되는 객체입니다.
 
 public class ArticleService {
-    @Autowired
     private final ArticleRepository articleRepository;
 
     public ArticleService(ArticleRepository articleRepository) {
         this.articleRepository = articleRepository;
     }
-
-    @Autowired
 
     public Article write(String title, String body) {
         Article article = new Article(title,body);
