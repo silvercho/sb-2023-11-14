@@ -1,7 +1,7 @@
-package com.ll.sb20231114;
+package com.ll.sb20231114.domain.home.home.controller;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
+import com.ll.sb20231114.Person;
+import com.ll.sb20231114.Person2;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -15,48 +15,51 @@ import java.util.Map;
 @Controller
 public class HomeController {
 
-    @GetMapping ("/")
-   // @ResponseBody // 이 함수의 리턴값을 그대로 브라우저에 전송 하라는 의미
-    String showMain(){
+    @GetMapping("/")
+        // @ResponseBody // 이 함수의 리턴값을 그대로 브라우저에 전송 하라는 의미
+    String showMain() {
         System.out.println("안녕하세요!!!"); // 콘솔에 출력됨
         return "안녕하세요.";
     }
-    @GetMapping ("/about")
+
+    @GetMapping("/about")
     @ResponseBody
-    String showAbout(){
+    String showAbout() {
         return "개발자 커뮤니티";
     }
 
-    @GetMapping ("/calc")
+    @GetMapping("/calc")
     @ResponseBody
-    String showCalc(int a , int b){
-        return "계산 결과 : %d".formatted(a+b);
+    String showCalc(int a, int b) {
+        return "계산 결과 : %d".formatted(a + b);
     }
-    @GetMapping ("/calc2")
+
+    @GetMapping("/calc2")
     @ResponseBody
-    String showCalc2(Integer a , Integer b){
+    String showCalc2(Integer a, Integer b) {
         return "a : " + a + " , b : " + b;
     }
-    @GetMapping ("/calc3")
+
+    @GetMapping("/calc3")
     @ResponseBody
     String showCalc3(
-            @RequestParam(defaultValue =  "0") int a,
-            @RequestParam(defaultValue =  "0") int b
-    ){
-        return "계산 결과 : %d".formatted(a+b);
+            @RequestParam(defaultValue = "0") int a,
+            @RequestParam(defaultValue = "0") int b
+    ) {
+        return "계산 결과 : %d".formatted(a + b);
     }
     // http://localhost:8020/clac3?a=10&b=20
 
-    @GetMapping ("/calc4")
+    @GetMapping("/calc4")
     @ResponseBody
     String showCalc4(
-            @RequestParam(defaultValue =  "0") double a,
-            @RequestParam(defaultValue =  "0") double b
-    ){
-        return "계산 결과 : %d".formatted(a+b);
+            @RequestParam(defaultValue = "0") double a,
+            @RequestParam(defaultValue = "0") double b
+    ) {
+        return "계산 결과 : %d".formatted(a + b);
     }
 
-    @GetMapping ("/calc5")
+    @GetMapping("/calc5")
     @ResponseBody
     String showCalc5(
             @RequestParam(defaultValue = "-") String a,
@@ -64,6 +67,7 @@ public class HomeController {
     ) {
         return "계산 결과 : %s".formatted(a + b);
     }
+
     @GetMapping("/calc6")
     @ResponseBody
     int showCalc6(
@@ -79,6 +83,7 @@ public class HomeController {
     ) {
         return a > b;
     }
+
     @GetMapping("/calc8")
     @ResponseBody
     Person showCalc8(
@@ -94,6 +99,7 @@ public class HomeController {
     ) {
         return new Person2(name, age);
     }
+
     @GetMapping("/calc10")
     @ResponseBody
     Map<String, Object> showCalc10(
@@ -118,6 +124,7 @@ public class HomeController {
 
         return nums;
     }
+
     @GetMapping("/calc12")
     @ResponseBody
     int[] showCalc12() {
@@ -151,6 +158,7 @@ public class HomeController {
 
         return html;
     }
+
     @GetMapping("/calc15")
     @ResponseBody
     String showCalc15() {
@@ -162,6 +170,7 @@ public class HomeController {
 
         return sb.toString();
     }
+
     @GetMapping("/calc16")
     @ResponseBody
     String showCalc16() {
@@ -181,6 +190,7 @@ public class HomeController {
 
         return html;
     }
+
     @GetMapping("/calc18")
     @ResponseBody
     String showCalc18() {
@@ -210,6 +220,7 @@ public class HomeController {
 
         return html;
     }
+
     @GetMapping("/calc20")
     String showCalc20() {
         return "calc20";
@@ -221,25 +232,14 @@ public class HomeController {
         model.addAttribute("v2", "반가워");
         return "calc21";
     }
+
     int num = 0;
+
     @ResponseBody
     @GetMapping("/calc22")
     int showCalc22() {
 
-        num ++;
+        num++;
         return num;
     }
-}
-@AllArgsConstructor // 생성자 자동 생성
-class Person {
-    public String name;
-    public int age;
-}
-
-@AllArgsConstructor
-class Person2 {
-    @Getter
-    private String name;
-    @Getter
-    private int age;
 }
