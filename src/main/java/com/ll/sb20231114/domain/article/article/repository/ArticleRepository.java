@@ -11,7 +11,7 @@ import java.util.List;
 @Repository
 @RequiredArgsConstructor
 public class ArticleRepository {
-    private final ArticleArrayList articles;
+    private final List<Article> articles;
     public Article save(Article article) {
         if (article.getId() == null) {
             article.setId(articles.size() + 1L);
