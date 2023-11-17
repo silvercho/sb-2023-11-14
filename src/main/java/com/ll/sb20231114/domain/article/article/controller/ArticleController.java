@@ -3,6 +3,7 @@ package com.ll.sb20231114.domain.article.article.controller;
 import com.ll.sb20231114.domain.article.article.entity.Article;
 import com.ll.sb20231114.domain.article.article.service.ArticleService;
 import com.ll.sb20231114.global.rsData.RsData;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -13,8 +14,8 @@ import java.util.List;
 
 @Controller
 public class ArticleController {
-    // 이 배열은 게시물들을 저장하는 곳이에요.
-    private final ArticleService articleService = new ArticleService();
+    @Autowired // 의존성 주입을 도와주는 어노테이션 (필요한 인스턴스 주입)
+    private  ArticleService articleService;
     @GetMapping ("article/write")
     String showWrite(){
         return "article/write";
