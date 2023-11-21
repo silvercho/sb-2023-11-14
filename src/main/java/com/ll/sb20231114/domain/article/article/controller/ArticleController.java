@@ -58,6 +58,8 @@ public class ArticleController {
         );
         ObjectMapper objectMapper = new ObjectMapper();
 
+        resp.setContentType("application/json");
+        resp.setCharacterEncoding("UTF-8");
         resp.getWriter().println(objectMapper.writeValueAsString(rs));
     }
 
@@ -72,5 +74,21 @@ public class ArticleController {
         return articleService.findAll();
     }
 
+    @GetMapping("/article/articleServicePointer")
+    @ResponseBody
+    String articleServicePointer(){
+        return articleService.toString();
+    }
+    @GetMapping("/article/httpServletRequestPointer")
+    @ResponseBody
+    String httpServletRequestPointer(HttpServletRequest req) {
+        return req.toString();
+    }
+
+    @GetMapping("/article/httpServletResponsePointer")
+    @ResponseBody
+    String httpServletResponsePointer(HttpServletResponse resp) {
+        return resp.toString();
+    }
 }
 
