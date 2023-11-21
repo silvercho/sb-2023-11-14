@@ -16,6 +16,8 @@ public class ArticleRepository {
         add(new Article(2L, "제목 2", "내용 2"));
         add(new Article(3L, "제목 3", "내용 3"));
     }};
+    // 앱 시작시 자동으로 게시물이 3개 생성됨.
+
     public Article save(Article article) {
         if (article.getId() == null) {
             article.setId(articles.size() + 1L);
