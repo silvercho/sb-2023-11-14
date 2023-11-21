@@ -25,6 +25,16 @@ public class ArticleController {
 
     private final ArticleService articleService;
     private final Rq rq;
+
+    @GetMapping("/article/delete/{id}")
+    String delete(@PathVariable long id) {
+        articleService.delete(id);
+
+        String msg = "id %d, article deleted".formatted(id);
+
+        return "redirect:/article/list?msg=" + msg;
+    }
+
     @GetMapping ("article/write")
     String showWrite(){
         return "article/write";
