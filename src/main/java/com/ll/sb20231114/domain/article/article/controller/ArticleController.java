@@ -31,11 +31,10 @@ public class ArticleController {
     }
 
     @GetMapping("/article/detail/{id}")
-    @ResponseBody
-    String showDetail(@PathVariable long id) {
+    String showDetail(Model model, @PathVariable long id) {
         // PathVariable 을 사용하여 몇번 게시물을 보여줘야 할지 입력받음.
-        Optional<Article> opArticle = articleService.findById(id);
-        Article article = opArticle.get();
+        Article article = articleService.findById(id).get();
+        model.addAttribute("article", article);
 
         return "article/detail";
     }
