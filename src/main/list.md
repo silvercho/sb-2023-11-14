@@ -38,3 +38,4 @@ writeForm.password = "bbb";
 
 14. 브라우저가 해당 명령을 수행
 GET /member/login
+15.  // 타임리프에게 데이터를 넘기고 [[${article}]] 으로 데이터 단순출력

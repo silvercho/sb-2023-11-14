@@ -21,19 +21,19 @@
         const title = inputTitle.value;
         const body = inputBody.value;
 
-        // if (title.length == 0) {
-        //     alert('제목을 입력해주세요.');
-        //     inputTitle.focus();
-        //
-        //     return;
-        // }
-        //
-        // if (body.length == 0) {
-        //     alert('내용을 입력해주세요.');
-        //     inputBody.focus();
-        //
-        //     return;
-        // }
+        if (title.length == 0) {
+            alert('제목을 입력해주세요.');
+            inputTitle.focus();
+
+            return;
+        }
+
+        if (body.length == 0) {
+            alert('내용을 입력해주세요.');
+            inputBody.focus();
+
+            return;
+        }
 
         form.submit();
     }
