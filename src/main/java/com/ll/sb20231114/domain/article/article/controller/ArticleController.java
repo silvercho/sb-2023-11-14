@@ -17,46 +17,19 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import java.util.List;
-import java.util.Optional;
 
 @Controller
 @RequiredArgsConstructor // 생성자 주입
 public class ArticleController {
 
     private final ArticleService articleService;
-    private final Rq rq;
 
-    @GetMapping("/article/modify/{id}")
-    String showModify(Model model, @PathVariable long id) {
-        Article article = articleService.findById(id).get();
+    @GetMapping("/article/list")
+    String showList(Model model) {
+        List<Article> articles = articleService.findAll();
+        model.addAttribute("aricles", articles);
 
-        model.addAttribute("article", article);
-
-        return "article/modify";
-    }
-    @Data
-    public static class ModifyForm {
-        @NotBlank
-        private String title;
-        @NotBlank
-        private String body;
-    }
-
-    @PostMapping("/article/modify/{id}")
-    String write(@PathVariable long id, @Valid ModifyForm modifyForm) {
-        articleService.modify(id, modifyForm.title, modifyForm.body);
-
-        String msg = "id %d, article modified".formatted(id);
-
-        return "redirect:/article/list?msg=" + msg;
-    }
-    @GetMapping("/article/delete/{id}")
-    String delete(@PathVariable long id) {
-        articleService.delete(id);
-
-        String msg = "id %d, article deleted".formatted(id);
-
-        return "redirect:/article/list?msg=" + msg;
+        return "article/list";
     }
 
     @GetMapping ("article/write")
@@ -90,54 +63,31 @@ public class ArticleController {
         return "redirect:/article/list?msg=" + msg;
     }
 
-    @GetMapping("/article/list")
-    String showList(Model model) {
-        List<Article> articles = articleService.findAll();
+    @GetMapping("/article/modify/{id}")
+    String showModify(Model model, @PathVariable long id) {
+        Article article = articleService.findById(id).get();
+        model.addAttribute("article", article);
 
-        model.addAttribute("articles", articles);
-
-        return "article/list";
+        return "article/modify";
     }
-
-    @GetMapping ("article/getLastArticle")
-    @ResponseBody
-    Article getLastArticle(){
-        return articleService.findLastArticle();
+    @Data
+    public static class ModifyForm {
+        @NotBlank
+        private String title;
+        @NotBlank
+        private String body;
     }
-    @GetMapping ("article/getArticle")
-    @ResponseBody
-    List<Article> getArticle(){
-        return articleService.findAll();
+    @PostMapping("/article/modify/{id}")
+    String write(@PathVariable long id, @Valid ModifyForm modifyForm) {
+        articleService.modify(id, modifyForm.title, modifyForm.body);
+        String msg = "id %d, article modified".formatted(id);
+        return "redirect:/article/list?msg=" + msg;
     }
-
-    @GetMapping("/article/articleServicePointer")
-    @ResponseBody
-    String articleServicePointer(){
-        return articleService.toString();
-    }
-    @GetMapping("/article/httpServletRequestPointer")
-    @ResponseBody
-    String httpServletRequestPointer(HttpServletRequest req) {
-        return req.toString();
-    }
-
-    @GetMapping("/article/httpServletResponsePointer")
-    @ResponseBody
-    String httpServletResponsePointer(HttpServletResponse resp) {
-        return resp.toString();
-    }
-    @GetMapping("/article/rqPointer")
-    @ResponseBody
-    String rqPointer() {
-        return rq.toString();
-    }
-    @GetMapping("/article/rqTest")
-    String showRqTest(Model model) {
-        String rqToString = rq.toString();
-
-        model.addAttribute("rqToString", rqToString);
-
-        return "article/rqTest";
+    @GetMapping("/article/delete/{id}")
+    String delete(@PathVariable long id) {
+        articleService.delete(id);
+        String msg = "id %d, article deleted".formatted(id);
+        return "redirect:/article/list?msg=" + msg;
     }
 }
 

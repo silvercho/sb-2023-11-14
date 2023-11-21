@@ -8,7 +8,7 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.Optional;
 
-@Service // 저는 단 한번만 생성되고, 그 이후에는 재사용되는 객체입니다.
+@Service
 @RequiredArgsConstructor
 public class ArticleService {
     private final ArticleRepository articleRepository;
@@ -18,10 +18,6 @@ public class ArticleService {
         articleRepository.save(article);
 
         return article;
-    }
-
-    public Article findLastArticle() {
-        return articleRepository.findLastArticle();
     }
 
     public List<Article> findAll() {
