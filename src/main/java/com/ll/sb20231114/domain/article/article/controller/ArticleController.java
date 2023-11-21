@@ -3,6 +3,7 @@ package com.ll.sb20231114.domain.article.article.controller;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ll.sb20231114.domain.article.article.entity.Article;
 import com.ll.sb20231114.domain.article.article.service.ArticleService;
+import com.ll.sb20231114.global.rq.Rq.Rq;
 import com.ll.sb20231114.global.rsData.RsData;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -20,6 +21,7 @@ import java.util.List;
 public class ArticleController {
 
     private final ArticleService articleService;
+    private final Rq rq;
     @GetMapping ("article/write")
     String showWrite(){
         return "article/write";
@@ -89,6 +91,11 @@ public class ArticleController {
     @ResponseBody
     String httpServletResponsePointer(HttpServletResponse resp) {
         return resp.toString();
+    }
+    @GetMapping("/article/rqPointer")
+    @ResponseBody
+    String rqPointer() {
+        return rq.toString();
     }
 }
 
