@@ -13,8 +13,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 
-import java.net.URLEncoder;
-import java.nio.charset.StandardCharsets;
 import java.util.List;
 
 @Controller
@@ -26,7 +24,7 @@ public class ArticleController {
     @GetMapping("/article/list")
     String showList(Model model) {
         List<Article> articles = articleService.findAll();
-        model.addAttribute("aricles", articles);
+        model.addAttribute("articles", articles);
 
         return "article/article/list";
     }
