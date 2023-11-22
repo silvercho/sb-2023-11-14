@@ -30,28 +30,14 @@ public class ArticleController {
     private final Rq rq;
     @GetMapping("/article/list")
     String showList(Model model, HttpServletRequest req) {
-        // 쿠키이름이 loginedMemberId 이것인 것의 값을 가져와서 long 타입으로 변환, 만약에 그런게 없다면, 0을 반환
-        long loginedMemberId = Optional.ofNullable(req.getCookies())
-                .stream()
-                .flatMap(Arrays::stream)
-                .filter(cookie -> cookie.getName().equals("loginedMemberId"))
-                .map(Cookie::getValue)
-                .mapToLong(Long::parseLong)
-                .findFirst()
-                .orElse(0);
+
+        long loginedMemberId = Optional
+                .ofNullable(req.getSession().getAttribute("loginedMemberId"))
+                .map(id -> (long) id)
+                .orElse(0L);
 
         if (loginedMemberId > 0) {
             Member loginedMember = memberService.findById(loginedMemberId).get();
-            model.addAttribute("loginedMember", loginedMember);
-        }
-
-        long fromSessionLoginedMemberId = 0;
-
-        if (req.getSession().getAttribute("loginedMemberId") != null)
-            fromSessionLoginedMemberId = (long) req.getSession().getAttribute("loginedMemberId");
-
-        if (fromSessionLoginedMemberId > 0) {
-            Member loginedMember = memberService.findById(fromSessionLoginedMemberId).get();
             model.addAttribute("fromSessionLoginedMember", loginedMember);
         }
 
@@ -62,12 +48,29 @@ public class ArticleController {
     }
 
     @GetMapping ("article/write")
-    String showWrite(){
+    String showWrite() {
+        HttpServletRequest req = rq.getReq();
+
+        long loginedMemberId = rq.getLoginedMemberId();
+
+        if (loginedMemberId > 0) {
+            Member loginedMember = rq.getLoginedMember();
+            req.setAttribute("loginedMember", loginedMember);
+        }
         return "article/article/write";
     }
 
     @GetMapping("/article/detail/{id}")
-    String showDetail(Model model, @PathVariable long id) {
+    String showDetail(Model model, @PathVariable long id, HttpServletRequest req) {
+        long loginedMemberId = Optional
+                .ofNullable(req.getSession().getAttribute("loginedMemberId"))
+                .map(_id -> (long) _id)
+                .orElse(0L);
+
+        if (loginedMemberId > 0) {
+            Member loginedMember = memberService.findById(loginedMemberId).get();
+            model.addAttribute("loginedMember", loginedMember);
+        }
         // PathVariable 을 사용하여 몇번 게시물을 보여줘야 할지 입력받음.
         Article article = articleService.findById(id).get();
         model.addAttribute("article", article);

@@ -2,7 +2,6 @@ package com.ll.sb20231114.domain.member.member.controller;
 import com.ll.sb20231114.domain.member.member.entity.Member;
 import com.ll.sb20231114.domain.member.member.service.MemberService;
 import com.ll.sb20231114.global.rq.Rq.Rq;
-import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
@@ -41,10 +40,6 @@ public class MemberController {
         if (!member.getPassword().equals(loginForm.password)) {
             throw new IllegalArgumentException("비밀번호가 일치하지 않습니다.");
         }
-
-        Cookie cookie = new Cookie("loginedMemberId",  member.getId() + "");
-        cookie.setPath("/");
-        response.addCookie(cookie);
 
         HttpSession session = req.getSession();
         session.setAttribute("loginedMemberId", member.getId());
