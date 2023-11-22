@@ -3,8 +3,6 @@ package com.ll.sb20231114.domain.article.article.controller;
 import com.ll.sb20231114.domain.article.article.entity.Article;
 import com.ll.sb20231114.domain.article.article.service.ArticleService;
 import com.ll.sb20231114.global.rq.Rq.Rq;
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
 import lombok.Data;
@@ -14,7 +12,6 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
 
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
@@ -25,7 +22,7 @@ import java.util.List;
 public class ArticleController {
 
     private final ArticleService articleService;
-
+    private final Rq rq;
     @GetMapping("/article/list")
     String showList(Model model) {
         List<Article> articles = articleService.findAll();
@@ -60,10 +57,7 @@ public class ArticleController {
     String write(@Valid WriteForm writeForm) {
         Article article = articleService.write(writeForm.title, writeForm.body);
 
-        String msg = "%d번 게시물 생성되었습니다.".formatted(article.getId());
-        msg = URLEncoder.encode(msg, StandardCharsets.UTF_8);
-        // utf-8 한글 지원
-        return "redirect:/article/list?msg=" + msg;
+        return rq.redirect("/article/list", "%d번 게시물 생성되었습니다.".formatted(article.getId()));
     }
 
     @GetMapping("/article/modify/{id}")
@@ -81,18 +75,14 @@ public class ArticleController {
         private String body;
     }
     @PostMapping("/article/modify/{id}")
-    String write(@PathVariable long id, @Valid ModifyForm modifyForm) {
+    String modify(@PathVariable long id, @Valid ModifyForm modifyForm) {
         articleService.modify(id, modifyForm.title, modifyForm.body);
-        String msg = "%d번 게시물 수정되었습니다.".formatted(id);
-        msg = URLEncoder.encode(msg, StandardCharsets.UTF_8);
-        return "redirect:/article/list?msg=" + msg;
+        return rq.redirect("/article/list", "%d번 게시물 수정되었습니다.".formatted(id));
     }
     @GetMapping("/article/delete/{id}")
     String delete(@PathVariable long id) {
         articleService.delete(id);
-        String msg = "%d번 게시물 삭제되었습니다.".formatted(id);
-        msg = URLEncoder.encode(msg, StandardCharsets.UTF_8);
-        return "redirect:/article/list?msg=" + msg;
+        return rq.redirect("/article/list", "%d번 게시물 삭제되었습니다.".formatted(id));
     }
 }
 
