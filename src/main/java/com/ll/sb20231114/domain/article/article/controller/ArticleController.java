@@ -28,12 +28,12 @@ public class ArticleController {
         List<Article> articles = articleService.findAll();
         model.addAttribute("aricles", articles);
 
-        return "article/list";
+        return "article/article/list";
     }
 
     @GetMapping ("article/write")
     String showWrite(){
-        return "article/write";
+        return "article/article/write";
     }
 
     @GetMapping("/article/detail/{id}")
@@ -42,7 +42,7 @@ public class ArticleController {
         Article article = articleService.findById(id).get();
         model.addAttribute("article", article);
 
-        return "article/detail";
+        return "article/article/detail";
     }
     @Data
     public static class WriteForm {
@@ -65,7 +65,7 @@ public class ArticleController {
         Article article = articleService.findById(id).get();
         model.addAttribute("article", article);
 
-        return "article/modify";
+        return "article/article/modify";
     }
     @Data
     public static class ModifyForm {
