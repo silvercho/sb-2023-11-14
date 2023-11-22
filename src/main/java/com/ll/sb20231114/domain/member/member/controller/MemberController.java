@@ -2,6 +2,8 @@ package com.ll.sb20231114.domain.member.member.controller;
 import com.ll.sb20231114.domain.member.member.entity.Member;
 import com.ll.sb20231114.domain.member.member.service.MemberService;
 import com.ll.sb20231114.global.rq.Rq.Rq;
+import jakarta.servlet.http.Cookie;
+import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
 import lombok.Data;
@@ -31,15 +33,16 @@ public class MemberController {
     }
 
     @PostMapping("/member/login")
-    String login(@Valid LoginForm loginForm) {
+    String login(@Valid LoginForm loginForm, HttpServletResponse response) {
         Member member = memberService.findByUsername(loginForm.username).get();
 
         if (!member.getPassword().equals(loginForm.password)) {
             throw new IllegalArgumentException("비밀번호가 일치하지 않습니다.");
         }
 
-        // 로그인 처리
-
+        Cookie cookie = new Cookie("loginedMemberId", "2");
+        cookie.setPath("/");
+        response.addCookie(cookie);
         return rq.redirect("/article/list", "로그인이 완료되었습니다.");
     }
     @GetMapping("/member/join")
