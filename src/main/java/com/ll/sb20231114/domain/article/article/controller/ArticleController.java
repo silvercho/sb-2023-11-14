@@ -2,10 +2,8 @@ package com.ll.sb20231114.domain.article.article.controller;
 
 import com.ll.sb20231114.domain.article.article.entity.Article;
 import com.ll.sb20231114.domain.article.article.service.ArticleService;
-import com.ll.sb20231114.domain.member.member.entity.Member;
 import com.ll.sb20231114.domain.member.member.service.MemberService;
 import com.ll.sb20231114.global.rq.Rq.Rq;
-import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
@@ -17,9 +15,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 
-import java.util.Arrays;
 import java.util.List;
-import java.util.Optional;
 
 @Controller
 @RequiredArgsConstructor // 생성자 주입
@@ -29,18 +25,7 @@ public class ArticleController {
     private final MemberService memberService;
     private final Rq rq;
     @GetMapping("/article/list")
-    String showList(Model model, HttpServletRequest req) {
-
-        long loginedMemberId = Optional
-                .ofNullable(req.getSession().getAttribute("loginedMemberId"))
-                .map(id -> (long) id)
-                .orElse(0L);
-
-        if (loginedMemberId > 0) {
-            Member loginedMember = memberService.findById(loginedMemberId).get();
-            model.addAttribute("fromSessionLoginedMember", loginedMember);
-        }
-
+    String showList(Model model) {
         List<Article> articles = articleService.findAll();
         model.addAttribute("articles", articles);
 
@@ -49,34 +34,18 @@ public class ArticleController {
 
     @GetMapping ("article/write")
     String showWrite() {
-        HttpServletRequest req = rq.getReq();
-
-        long loginedMemberId = rq.getLoginedMemberId();
-
-        if (loginedMemberId > 0) {
-            Member loginedMember = rq.getLoginedMember();
-            req.setAttribute("loginedMember", loginedMember);
-        }
         return "article/article/write";
     }
 
     @GetMapping("/article/detail/{id}")
-    String showDetail(Model model, @PathVariable long id, HttpServletRequest req) {
-        long loginedMemberId = Optional
-                .ofNullable(req.getSession().getAttribute("loginedMemberId"))
-                .map(_id -> (long) _id)
-                .orElse(0L);
-
-        if (loginedMemberId > 0) {
-            Member loginedMember = memberService.findById(loginedMemberId).get();
-            model.addAttribute("loginedMember", loginedMember);
-        }
+        String showDetail(Model model, @PathVariable long id) {
         // PathVariable 을 사용하여 몇번 게시물을 보여줘야 할지 입력받음.
         Article article = articleService.findById(id).get();
         model.addAttribute("article", article);
 
         return "article/article/detail";
     }
+
     @Data
     public static class WriteForm {
         @NotBlank
