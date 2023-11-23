@@ -52,9 +52,14 @@ public class Rq {
 
         return member;
     }
-    public void setSessionAttr(String name, long value) {
+    public void setSessionAttr(String name, Object value) {
         req.getSession().setAttribute(name, value);
     }
+
+    public <T> T getSessionAttr(String name) {
+        return (T) req.getSession().getAttribute(name);
+    }
+
     public void removeSessionAttr(String name) {
         req.getSession().removeAttribute(name);
     }
