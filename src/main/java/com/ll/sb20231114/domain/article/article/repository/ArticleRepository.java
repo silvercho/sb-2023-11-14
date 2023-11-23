@@ -12,11 +12,7 @@ import java.util.Optional;
 @Repository
 @RequiredArgsConstructor
 public class ArticleRepository {
-    private final List<Article> articles = new ArrayList<>() {{
-        add(new Article(1L, "제목 1", "내용 1"));
-        add(new Article(2L, "제목 2", "내용 2"));
-        add(new Article(3L, "제목 3", "내용 3"));
-    }};
+    private final List<Article> articles = new ArrayList<>();
     // 앱 시작시 자동으로 게시물이 3개 생성됨.
 
     public Article save(Article article) {
