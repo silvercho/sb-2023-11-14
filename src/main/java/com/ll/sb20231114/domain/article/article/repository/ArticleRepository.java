@@ -13,7 +13,6 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class ArticleRepository {
     private final List<Article> articles = new ArrayList<>();
-    // 앱 시작시 자동으로 게시물이 3개 생성됨.
 
     public Article save(Article article) {
         if (article.getId() == null) {
