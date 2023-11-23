@@ -1,6 +1,6 @@
 package com.ll.sb20231114.domain.home.home.controller;
 
-import com.ll.sb20231114.global.rq.Rq.Rq;
+import com.ll.sb20231114.global.rq.Rq;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;

@@ -1,7 +1,7 @@
 package com.ll.sb20231114.domain.member.member.controller;
 import com.ll.sb20231114.domain.member.member.entity.Member;
 import com.ll.sb20231114.domain.member.member.service.MemberService;
-import com.ll.sb20231114.global.rq.Rq.Rq;
+import com.ll.sb20231114.global.rq.Rq;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
 import lombok.Data;

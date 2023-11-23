@@ -3,7 +3,7 @@ package com.ll.sb20231114.domain.article.article.controller;
 import com.ll.sb20231114.domain.article.article.entity.Article;
 import com.ll.sb20231114.domain.article.article.service.ArticleService;
 import com.ll.sb20231114.domain.member.member.service.MemberService;
-import com.ll.sb20231114.global.rq.Rq.Rq;
+import com.ll.sb20231114.global.rq.Rq;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
