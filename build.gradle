@@ -27,6 +27,7 @@ dependencies {
 
     // 밸리데이션
     implementation 'org.springframework.boot:spring-boot-starter-validation'
+    implementation 'org.testng:testng:7.1.0'
 
     // devtools
     developmentOnly 'org.springframework.boot:spring-boot-devtools'
