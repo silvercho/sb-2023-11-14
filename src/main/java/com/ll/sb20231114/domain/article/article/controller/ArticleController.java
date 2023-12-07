@@ -16,17 +16,19 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 
 import java.util.List;
 
 @Controller
 @RequiredArgsConstructor // 생성자 주입
+@RequestMapping("/article")
 public class ArticleController {
 
     private final ArticleService articleService;
     private final MemberService memberService;
     private final Rq rq;
-    @GetMapping("/article/list")
+    @GetMapping("/list")
     String showList(Model model) {
         List<Article> articles = articleService.findAll();
         model.addAttribute("articles", articles);
@@ -35,12 +37,12 @@ public class ArticleController {
     }
 
     @PreAuthorize("isAuthenticated()")
-    @GetMapping ("article/write")
+    @GetMapping ("/write")
     String showWrite() {
         return "article/article/write";
     }
 
-    @GetMapping("/article/detail/{id}")
+    @GetMapping("/detail/{id}")
         String showDetail(Model model, @PathVariable long id) {
         // PathVariable 을 사용하여 몇번 게시물을 보여줘야 할지 입력받음.
         Article article = articleService.findById(id).get();
@@ -57,7 +59,7 @@ public class ArticleController {
         private String body;
     }
 
-    @PostMapping("article/write")
+    @PostMapping("/write")
     @PreAuthorize("isAuthenticated()")
     String write(@Valid WriteForm writeForm, HttpServletRequest req) {
         Article article = articleService.write(rq.getMember(),writeForm.title, writeForm.body);
@@ -66,7 +68,7 @@ public class ArticleController {
     }
 
     @PreAuthorize("isAuthenticated()")
-    @GetMapping("/article/modify/{id}")
+    @GetMapping("/modify/{id}")
     String showModify(Model model, @PathVariable long id) {
         Article article = articleService.findById(id).get();
 
@@ -85,7 +87,7 @@ public class ArticleController {
     }
 
     @PreAuthorize("isAuthenticated()")
-    @PostMapping("/article/modify/{id}")
+    @PostMapping("/modify/{id}")
     String modify(@PathVariable long id, @Valid ModifyForm modifyForm) {
         Article article = articleService.findById(id).get();
 
@@ -97,7 +99,7 @@ public class ArticleController {
     }
 
     @PreAuthorize("isAuthenticated()")
-    @GetMapping("/article/delete/{id}")
+    @PostMapping("/delete/{id}")
     String delete(@PathVariable long id) {
         Article article = articleService.findById(id).get();
 
