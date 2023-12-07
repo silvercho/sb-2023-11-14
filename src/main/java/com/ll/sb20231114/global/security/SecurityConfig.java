@@ -25,12 +25,12 @@ public class SecurityConfig {
                 .formLogin(
                         formLogin -> formLogin
                                 .loginPage("/member/login")
-                                .defaultSuccessUrl("/article/list")
+                                .defaultSuccessUrl("/")
                 )
                 .logout(
                         logout -> logout
                                 .logoutUrl("/memer/logout")
-                                .logoutSuccessUrl("/article/list")
+                                .logoutSuccessUrl("/")
                 )
                 .build();
     }
