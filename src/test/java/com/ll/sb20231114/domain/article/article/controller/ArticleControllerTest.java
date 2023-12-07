@@ -12,11 +12,13 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 
+import java.util.Optional;
+
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.hamcrest.Matchers.containsString;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 @SpringBootTest
@@ -36,6 +38,8 @@ public class ArticleControllerTest {
         ResultActions resultActions = mvc
                 .perform(get("/article/list"))
                 .andDo(print());
+
+        Article article = articleService.findLatest().get();
         // THEN
         resultActions
                 .andExpect(status().is2xxSuccessful())
@@ -45,14 +49,8 @@ public class ArticleControllerTest {
                         게시글 목록
                         """.stripIndent().trim())))
                 .andExpect(content().string(containsString("""
-                        3번 : 제목3
-                        """.stripIndent().trim())))
-                .andExpect(content().string(containsString("""
-                        2번 : 제목2
-                        """.stripIndent().trim())))
-                .andExpect(content().string(containsString("""
-                        1번 : 제목1
-                        """.stripIndent().trim())));
+                         %d번 : %s
+                        """.formatted(article.getId(), article.getTitle()).stripIndent().trim())));
     }
 
     // GET /article/detail/{id}
@@ -133,6 +131,95 @@ public class ArticleControllerTest {
         assertThat(article.getBody()).isEqualTo("내용 new");
     }
     // GET /article/modify/{id}
-    // PUT /article/modify/{id}
-    // DELETE /article/delete/{id}
+    @Test
+    @DisplayName("작성자가 아니라면 수정폼을 볼 수 없다.")
+    @WithUserDetails("user1")
+    void t5() throws Exception {
+        // WHEN
+        assertThrows(Exception.class, () -> {
+            ResultActions resultActions = mvc
+                    .perform(get("/article/modify/1"))
+                    .andDo(print());
+        });
+    }
+    // GET /article/modify/{id}
+    @Test
+    @DisplayName("게시물 수정폼 페이지를 보여준다.")
+    @WithUserDetails("admin")
+    void t6() throws Exception {
+        // WHEN
+        ResultActions resultActions = mvc
+                .perform(get("/article/modify/1"))
+                .andDo(print());
+
+        Article article = articleService.findById(1L).get();
+
+        // THEN
+        resultActions
+                .andExpect(status().is2xxSuccessful())
+                .andExpect(handler().handlerType(ArticleController.class))
+                .andExpect(handler().methodName("showModify"))
+                .andExpect(content().string(containsString("""
+                        게시글 수정
+                        """.stripIndent().trim())))
+                .andExpect(content().string(containsString("""
+                        <input type="text" name="title" value="%s"
+                        """.formatted(article.getTitle()).stripIndent().trim())))
+                .andExpect(content().string(containsString("""
+                        <textarea name="body"
+                        """.formatted(article.getBody()).stripIndent().trim())))
+                .andExpect(content().string(containsString("""
+                        >%s</textarea>
+                        """.formatted(article.getBody()).stripIndent().trim())))
+        ;
+    }
+    @Test
+    @DisplayName("게시물 수정폼 처리")
+    @WithUserDetails("admin")
+    void t7() throws Exception {
+        // WHEN
+        ResultActions resultActions = mvc
+                .perform(
+                        put("/article/modify/1")
+                                .with(csrf())
+                                .param("title", "제목 new")
+                                .param("body", "내용 new")
+                )
+                .andDo(print());
+
+        // THEN
+        resultActions
+                .andExpect(status().is3xxRedirection())
+                .andExpect(handler().handlerType(ArticleController.class))
+                .andExpect(handler().methodName("modify"))
+                .andExpect(redirectedUrlPattern("/article/list?msg=**"));
+
+        Article article = articleService.findById(1L).get();
+
+        assertThat(article.getTitle()).isEqualTo("제목 new");
+        assertThat(article.getBody()).isEqualTo("내용 new");
+    }
+    @Test
+    @DisplayName("게시물 삭제")
+    @WithUserDetails("admin")
+    void t8() throws Exception {
+        // WHEN
+        ResultActions resultActions = mvc
+                .perform(
+                        delete("/article/delete/1")
+                                .with(csrf())
+                )
+                .andDo(print());
+
+        // THEN
+        resultActions
+                .andExpect(status().is3xxRedirection())
+                .andExpect(handler().handlerType(ArticleController.class))
+                .andExpect(handler().methodName("delete"))
+                .andExpect(redirectedUrlPattern("/article/list?msg=**"));
+
+        Optional<Article> optionalArticle = articleService.findById(1L);
+
+        assertThat(optionalArticle.isEmpty()).isEqualTo(true);
+    }
 }
