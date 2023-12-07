@@ -51,5 +51,8 @@ public class ArticleService {
 
         return article.getAuthor().equals(actor);
     }
+    public Optional<Article> findLatest() {
+        return articleRepository.findLatest();
+    }
 }
 
