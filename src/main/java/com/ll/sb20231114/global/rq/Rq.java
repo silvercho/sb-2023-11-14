@@ -16,6 +16,7 @@ import org.springframework.web.context.annotation.RequestScope;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 import java.security.Security;
+import java.util.Date;
 import java.util.Optional;
 
 @RequestScope // HTTP 요청마다 새로운 빈 인스턴스가 생성
@@ -40,6 +41,7 @@ public class Rq {
     }
     public String redirect(String path, String msg) {
         msg = URLEncoder.encode(msg, StandardCharsets.UTF_8);
+        msg += ";ttl=" + (new Date().getTime() + 1000 * 5);
 
         return "redirect:" + path + "?msg=" + msg;
     }
