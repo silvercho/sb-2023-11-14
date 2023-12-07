@@ -40,6 +40,9 @@ public class Rq {
         }
     }
     public String redirect(String path, String msg) {
+        if (msg == null)
+            return "redirect:" + path;
+
         boolean containsTtl = msg.contains(";ttl=");
         if (containsTtl) {
             msg = msg.split(";ttl=", 2)[0];
@@ -87,5 +90,10 @@ public class Rq {
         return user.getAuthorities()
                 .stream()
                 .anyMatch(a -> a.getAuthority().equals("ROLE_ADMIN"));
+    }
+    public String historyBack(String msg) {
+        req.setAttribute("msg", msg);
+
+        return "global/js";
     }
 }
