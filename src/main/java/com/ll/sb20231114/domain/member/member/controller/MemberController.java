@@ -22,27 +22,7 @@ public class MemberController {
         return "member/member/login";
     }
 
-    @Data
-    public static class LoginForm {
-        @NotBlank
-        private String username;
-        @NotBlank
-        private String password;
-    }
 
-    @PostMapping("/member/login")
-    String login(@Valid LoginForm loginForm) {
-        Member member = memberService.findByUsername(loginForm.username).get();
-
-        if (!member.getPassword().equals(loginForm.password)) {
-            throw new IllegalArgumentException("비밀번호가 일치하지 않습니다.");
-        }
-
-        rq.setSessionAttr("loginedMemberId", member.getId());
-        rq.setSessionAttr("authorities", member.getAuthorities());
-
-        return rq.redirect("/article/list", "로그인이 완료되었습니다.");
-    }
     //로그아웃
     @GetMapping("/member/logout")
     String logout() {
