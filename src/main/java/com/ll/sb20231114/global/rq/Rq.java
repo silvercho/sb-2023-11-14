@@ -2,6 +2,7 @@ package com.ll.sb20231114.global.rq;
 
 import com.ll.sb20231114.domain.member.member.entity.Member;
 import com.ll.sb20231114.domain.member.member.service.MemberService;
+import com.ll.sb20231114.global.rsData.RsData;
 import jakarta.annotation.PostConstruct;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -39,6 +40,10 @@ public class Rq {
             this.user = (User) authentication.getPrincipal();
         }
     }
+    public String redirect(String path, RsData<?> rs) {
+        return redirect(path, rs.getMsg());
+    }
+
     public String redirect(String path, String msg) {
         if (msg == null)
             return "redirect:" + path;
@@ -91,10 +96,17 @@ public class Rq {
                 .stream()
                 .anyMatch(a -> a.getAuthority().equals("ROLE_ADMIN"));
     }
+    public String historyBack(RsData<?> rs) {
+        return historyBack(rs.getMsg());
+    }
     public String historyBack(String msg) {
         resp.setStatus(400);
         req.setAttribute("msg", msg);
 
         return "global/js";
+    }
+    public String redirectOrBack(String url, RsData<?> rs) {
+        if (rs.isFail()) return historyBack(rs);
+        return redirect(url, rs);
     }
 }

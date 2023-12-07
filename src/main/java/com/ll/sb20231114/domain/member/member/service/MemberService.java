@@ -17,7 +17,7 @@ public class MemberService {
 
     public RsData<Member> join(String username, String password) {
         if (findByUsername(username).isPresent()) {
-            throw  new RuntimeException("이미 존재하는 회원입니다.");
+            return new RsData<>("F-1", "이미 사용중인 아이디입니다.");
         }
 
         password = passwordEncoder.encode(password);

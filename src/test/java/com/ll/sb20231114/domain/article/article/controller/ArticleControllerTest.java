@@ -136,12 +136,15 @@ public class ArticleControllerTest {
     @WithUserDetails("user1")
     void t5() throws Exception {
         // WHEN
-        assertThrows(Exception.class, () -> {
-            ResultActions resultActions = mvc
-                    .perform(get("/article/modify/1"))
-                    .andDo(print());
-        });
+        ResultActions resultActions = mvc
+                .perform(get("/article/modify/1"))
+                .andDo(print());
+
+        // THEN
+        resultActions
+                .andExpect(status().is4xxClientError());
     }
+
     // GET /article/modify/{id}
     @Test
     @DisplayName("게시물 수정폼 페이지를 보여준다.")
